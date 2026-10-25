@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calculador de Cerámicos y Porcelanatos</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237a1020'/%3E%3Cstop offset='1' stop-color='%23c8293a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url%28%23g%29'/%3E%3Ctext x='32' y='48' text-anchor='middle' font-family='Arial,Helvetica,sans-serif' font-weight='900' font-size='46' fill='%23fff'%3EC%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7eaeb;--card:#fff;--ink:#3a1218;--mut:#7d5a60;--soft:#fbeeef;--line:#e8d0d3;--pri:#b3202f;--org:#f07f0a;color-scheme:light dark}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a0e10;--card:#2a1719;--ink:#f7e8ea;--mut:#cba5aa;--soft:#3a2024;--line:#57323a;--pri:#e0525f}}
+:root[data-theme="dark"]{--bg:#1a0e10;--card:#2a1719;--ink:#f7e8ea;--mut:#cba5aa;--soft:#3a2024;--line:#57323a;--pri:#e0525f}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Roboto',Arial,sans-serif}
+body{background:var(--bg);color:var(--ink);min-height:100vh;padding:10px 10px 24px}
+.hidden{display:none!important}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.hero{background:linear-gradient(135deg,#7a1020,#c8293a);color:#fff;border-radius:14px;padding:10px 14px;text-align:center;box-shadow:0 6px 18px rgba(122,16,32,.3);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
+.hero h1{font-size:clamp(17px,4.4vw,26px);font-weight:900;text-transform:uppercase;line-height:1.1}
+.hero .sub{font-size:11px;font-style:italic;opacity:.85;margin-top:3px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;max-width:560px;width:100%;margin:0 auto}
+@media(min-width:900px){.grid{max-width:1180px;grid-template-columns:minmax(360px,460px) minmax(0,1fr);align-items:start}.inp{grid-column:1;grid-row:1}.res{grid-column:1;grid-row:2}.dr{grid-column:2;grid-row:1/span 2;position:sticky;top:10px}.dv svg{max-height:70vh}}
+.card{background:var(--card);border-radius:14px;box-shadow:0 4px 16px rgba(50,0,10,.14);padding:12px;display:flex;flex-direction:column;gap:8px}
+.st{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.4px;color:var(--mut)}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:6px}.tg3{grid-template-columns:repeat(3,1fr)}.tg4{grid-template-columns:repeat(4,1fr)}
+.bt{padding:8px 4px;border:2px solid var(--line);background:var(--soft);color:var(--ink);font-weight:700;font-size:12.5px;border-radius:9px;cursor:pointer}
+.bt.on{background:var(--pri);border-color:var(--pri);color:#fff}
+.fmts{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:6px}
+.dims{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fld{display:flex;flex-direction:column;gap:3px}.fld label{font-size:12px;font-weight:700}
+.iw{display:flex;align-items:center;border:2px solid var(--pri);border-radius:10px;background:var(--card)}
+.iw input{width:100%;min-width:0;border:none;background:transparent;color:var(--ink);padding:7px 4px 7px 10px;font-size:20px;font-weight:700;outline:none}
+.iw span{padding:0 10px 0 4px;font-weight:800;color:var(--pri)}
+.iw input::-webkit-inner-spin-button,.iw input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.iw input[type=number]{-moz-appearance:textfield}
+.msg{background:#fff1d6;color:#7a4a00;border-radius:8px;padding:6px 10px;font-size:12px;font-weight:700}
+.res{border:3px solid var(--pri)}
+.fx{background:var(--soft);border-left:4px solid var(--pri);border-radius:6px;padding:6px 10px;font-size:12.5px;line-height:1.4}
+.main{position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:10px;background:linear-gradient(135deg,#8e1522,#d03a4b);color:#fff;border-radius:12px;padding:6px 14px;box-shadow:0 6px 16px rgba(142,21,34,.3)}
+.main::after{content:"";position:absolute;top:0;bottom:0;left:0;width:38%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:translateX(-130%) skewX(-20deg);animation:shine 3.4s ease-in-out infinite;pointer-events:none}
+@keyframes shine{0%{transform:translateX(-130%) skewX(-20deg)}55%,100%{transform:translateX(380%) skewX(-20deg)}}
+@media(prefers-reduced-motion:reduce){.main::after{animation:none;display:none}}
+.main .rl{font-size:15px;font-weight:800;text-transform:uppercase}.main span{font-size:clamp(32px,8vw,42px);font-weight:900}
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.box{border:2.5px solid var(--pri);background:var(--soft);border-radius:12px;padding:6px 9px}
+.box .rl{font-size:10.5px;font-weight:800;text-transform:uppercase;color:var(--mut);min-height:20px}
+.box span.v{font-size:26px;font-weight:900;color:var(--pri)}.box small{font-size:12px;font-weight:800;color:var(--mut)}
+.notice{display:flex;border-radius:9px;overflow:hidden;background:#fff6d1;border:1.5px solid #e0b400}
+.notice .sp{flex:none;width:12px;background:repeating-linear-gradient(-45deg,#1f1f1f 0 8px,#ffd400 8px 16px)}
+.notice p{padding:5px 9px;font-size:11px;font-weight:700;color:#4a3b00;line-height:1.3}.notice b{color:#7a1f00;letter-spacing:.8px;margin-right:4px}
+.pt{font-size:18px;font-weight:900;text-transform:uppercase}
+.dv{background:#f1f4f6;border-radius:12px;padding:6px;min-height:160px;display:flex;align-items:center;justify-content:center;color:#3a1218}
+.dv svg{width:100%;height:auto;max-height:64vh}
+.empty{font-size:15px;font-weight:700;color:#6b7780;text-align:center;padding:30px 14px;line-height:1.4}
+.di{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{background:var(--soft);border:2px solid var(--pri);border-radius:999px;padding:5px 11px;font-size:13px;font-weight:800}
+.lg{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700}.lg i{width:16px;height:10px;border-radius:2px}
+.banner{border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.15);max-width:560px;width:100%;margin:0 auto}.banner img{display:block;width:100%;height:auto}
+.pick{display:grid;grid-template-columns:68px minmax(0,1fr);gap:8px;align-items:center}
+.pic{width:68px;height:68px;border:2px solid var(--line);border-left:8px solid var(--pri);border-radius:10px;background:var(--soft);display:grid;place-items:center;overflow:hidden}.pic svg{width:90%}
+.sb{width:100%;text-align:left;border:2px solid var(--pri);border-radius:10px;padding:9px 12px;background:var(--card);color:var(--ink);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sb b{font-size:20px;font-weight:900}.sb small{font-size:12px;font-weight:800;color:var(--pri);white-space:nowrap}
+.sb.go{position:relative;overflow:hidden;justify-content:center;text-align:center;background:var(--pri);color:#fff;font-size:16px;font-weight:900;padding:18px 10px;border:3px solid var(--org);box-shadow:0 0 0 3px rgba(240,127,10,.25),0 6px 14px rgba(122,16,32,.35)}
+.sb.go::after{content:"";position:absolute;top:0;bottom:0;left:0;width:38%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:translateX(-130%) skewX(-20deg);animation:shine 3.4s ease-in-out infinite;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.sb.go::after{animation:none;display:none}}
+.opt{width:100%;border:2px solid var(--line);background:var(--soft);color:var(--ink);border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;text-align:left}
+.opt b{display:block;font-size:13px;font-weight:900;text-transform:uppercase}.opt small{font-size:12px;font-weight:700;color:var(--mut)}
+.opt i{font-style:normal;font-size:20px;font-weight:900;color:var(--pri);transition:transform .2s}.opt.open i{transform:rotate(180deg)}
+.ob{display:flex;flex-direction:column;gap:8px}
+.md{position:fixed;inset:0;background:rgba(28,5,9,.6);display:flex;align-items:center;justify-content:center;padding:12px;z-index:50}
+.mbox{background:var(--card);border-radius:16px;max-width:560px;width:100%;max-height:90vh;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.mh{display:flex;align-items:center;gap:8px}.mh b{flex:1;font-size:17px;font-weight:900;text-transform:uppercase}
+.mx{border:none;background:var(--soft);color:var(--ink);border-radius:50%;width:34px;height:34px;font-size:18px;font-weight:900;cursor:pointer}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.tcard{border:2px solid var(--line);background:var(--soft);color:var(--ink);border-radius:12px;padding:6px;cursor:pointer;display:flex;flex-direction:column;gap:5px;align-items:stretch;font-size:12px;font-weight:800;text-align:center}
+.tcard:hover,.tcard.on{border-color:var(--pri)}
+.th{height:78px;border-radius:8px;background:var(--card);display:grid;place-items:center}.th svg{height:90%}
+.th.plus{font-size:34px;font-weight:900;color:var(--pri)}.tcard.oth{border-style:dashed}
+.go{background:var(--pri);color:#fff;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:900;cursor:pointer}
+/* ---- barra superior: volver + nuevo cálculo ---- */
+.hero .back{justify-self:start}.hero .newc{justify-self:end}
+.hbtn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.6);color:#fff;border-radius:999px;font-weight:800;font-size:12.5px;padding:8px 13px;cursor:pointer;text-decoration:none;white-space:nowrap;transition:background .15s}
+.hbtn:hover{background:rgba(255,255,255,.3)}
+.hbtn:focus-visible{outline:3px solid #ffd27a;outline-offset:2px}
+.hbtn.newc{background:var(--org);border-color:#ffd9a3;color:#fff;box-shadow:0 3px 10px rgba(0,0,0,.25)}.hbtn.newc:hover{background:#ff9419}
+.hbtn svg{width:18px;height:18px;display:block;flex:none}
+@media(max-width:760px){.hero{grid-template-columns:1fr auto;grid-template-areas:"b n" "t t"}.hero .back{grid-area:b}.hero .newc{grid-area:n}.hero .ht{grid-area:t}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <a class="hbtn back" href="https://capacitacion3vesmartin-ves.github.io/campuscapacitacion/" target="_top">‹ Volver al Campus</a>
+  <div class="ht"><h1>Calculador de cerámicos y porcelanatos</h1><div class="sub">By: Capacitación V.E.S.</div></div>
+  <button type="button" class="hbtn newc" onclick="newCalc()" title="Nuevo cálculo" aria-label="Nuevo cálculo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v4.5h-4.5"/><path d="M12 9v6M9 12h6"/></svg><span>Nuevo cálculo</span>
+  </button>
+</header>
+<div class="grid">
+
+<section class="card inp">
+  <div class="st">Medidas del espacio</div>
+  <div class="tg"><button type="button" class="bt on" id="m-med" onclick="setMode('med')">Ancho × largo</button><button type="button" class="bt" id="m-m2" onclick="setMode('m2')">Solo m²</button></div>
+  <div class="dims" id="d-med">
+    <div class="fld"><label for="a">Ancho</label><div class="iw"><input type="number" id="a" step="0.01" min="0" placeholder="0.00" inputmode="decimal" onfocus="this.select()" oninput="calc()"><span>m</span></div></div>
+    <div class="fld"><label for="l">Largo</label><div class="iw"><input type="number" id="l" step="0.01" min="0" placeholder="0.00" inputmode="decimal" onfocus="this.select()" oninput="calc()"><span>m</span></div></div>
+  </div>
+  <div class="fld hidden" id="d-m2"><label for="m">Área total a cubrir</label><div class="iw"><input type="number" id="m" step="0.01" min="0" placeholder="0.00" inputmode="decimal" onfocus="this.select()" oninput="calc()"><span>m²</span></div></div>
+
+  <div class="st">Tamaño de la pieza</div>
+  <div class="pick"><div class="pic" id="pic"></div><button type="button" class="sb go" id="b-pick" onclick="openM()">Elegir tamaño ›</button></div>
+
+  <div class="fld"><label for="r">Rendimiento por caja</label><div class="iw"><input type="number" id="r" step="0.01" min="0" placeholder="0.00" inputmode="decimal" onfocus="this.select()" oninput="calc()"><span>m²</span></div></div>
+
+  <button type="button" class="opt" id="opt" onclick="togOpt()"><span><b>Instalación, junta y desperdicio</b><small id="osum"></small></span><i>▾</i></button>
+  <div class="ob hidden" id="obody">
+  <div class="dims">
+    <div class="fld"><div class="st">Instalación</div><div class="tg"><button type="button" class="bt on" id="y-r" onclick="setLay('r')">Recta</button><button type="button" class="bt" id="y-d" onclick="setLay('d')">Diagonal</button></div></div>
+    <div class="fld"><div class="st">Junta</div><div class="tg tg4" id="jn"></div></div>
+  </div>
+  <div class="fld"><div class="st">Desperdicio por cortes</div><div class="tg tg4" id="dg"></div></div>
+  </div>
+  <div class="msg hidden" id="bad"></div>
+</section>
+
+<section class="card res">
+  <div class="fx" id="fx">Escribe las medidas y el rendimiento de la caja.</div>
+  <div class="main"><div class="rl">Cajas:</div><span id="n">0</span></div>
+  <div class="tg tg3">
+    <button type="button" class="bt" id="r-real" onclick="setRd('real')">Ver real</button>
+    <button type="button" class="bt on" id="r-up" onclick="setRd('up')">Redondear ↑</button>
+    <button type="button" class="bt" id="r-down" onclick="setRd('down')">Redondear ↓</button>
+  </div>
+  <div class="rg">
+    <div class="box"><div class="rl">Pegamento</div><span class="v" id="peg">0</span> <small>sacos 25 kg</small></div>
+    <div class="box"><div class="rl">Fragua</div><span class="v" id="fra">0</span> <small>sacos</small></div>
+  </div>
+</section>
+
+<section class="card dr">
+  <div class="notice"><div class="sp"></div><p><b>IMPORTANTE:</b>El cálculo de materiales es aproximado. Siempre hay posibilidad que pueda sobrar o faltar material.</p></div>
+  <div class="pt" id="pt">Así quedaría</div>
+  <div class="dv" id="dv"><div class="empty">Escribe las medidas para ver cómo queda el piso.</div></div>
+  <div class="di" id="di"></div>
+</section>
+</div>
+<div class="banner"><img src="https://image2url.com/r2/default/images/1774306178454-b0969afe-ce2f-4f2e-9e3f-aacfb880f5a9.jpg" alt="Capacitación V.E.S." onerror="this.parentNode.classList.add('hidden')"></div>
+</div>
+
+<div class="md hidden" id="md" onclick="if(event.target===this)closeM()"><div class="mbox"><div class="mh"><button type="button" class="mx hidden" id="mback" onclick="openM()">‹</button><b id="mt">Elegir tamaño de pieza</b><button type="button" class="mx" onclick="closeM()">✕</button></div><div id="mb"></div></div></div>
+<script>
+const $=id=>document.getElementById(id);
+const FM=[[20,20],[30,30],[40,40],[45,45],[50,50],[60,60],[80,80],[60,120],[20,120]];
+const S={mode:'med',fi:null,cu:[0,0],lay:'r',jn:3,dg:10,rd:'up'};
+const f2=x=>x.toFixed(2),r6=x=>Math.round(x*1e6)/1e6;
+function rd(x){x=r6(x);return S.rd==='up'?Math.ceil(x):S.rd==='down'?Math.floor(x):+x.toFixed(2)}
+function mk(id,arr,key,fmt,fn){$(id).innerHTML=arr.map((v,i)=>'<button type="button" class="bt'+(S[key]===(fn?v:i)?' on':'')+'" onclick="'+(fn||'setI')+'(\''+key+'\','+(fn?v:i)+')">'+fmt(v,i)+'</button>').join('')}
+function setI(k,v){S[k]=v;build();calc()}
+function tp(a,b){const w=Math.min(a,b),l=Math.max(a,b),k=Math.min(70/(2*l),70/(2*w)),ox=(80-2*l*k)/2,oy=(80-2*w*k)/2;let t='<svg viewBox="0 0 80 80">';
+  for(let r=0;r<2;r++)for(let c=0;c<2;c++)t+='<rect x="'+(ox+c*l*k)+'" y="'+(oy+r*w*k)+'" width="'+l*k+'" height="'+w*k+'" fill="'+((r+c)%2?'#efc3c8':'#f7d9dc')+'" stroke="#8d969c" stroke-width="1.4"/>';
+  return t+'</svg>'}
+const cur=()=>S.fi===null?[0,0]:S.fi===-1?S.cu:FM[S.fi];
+function showPick(){const[a,b]=cur(),ok=a>0&&b>0,bp=$('b-pick');$('pic').innerHTML=tp(ok?a:1,ok?b:1);$('pic').style.opacity=ok?1:.45;
+  bp.className='sb'+(ok?'':' go');bp.innerHTML=ok?'<b>'+a+' × '+b+' cm</b><small>⇄ Cambiar</small>':'Elegir tamaño ›'}
+function openM(){$('md').classList.remove('hidden');$('mback').classList.add('hidden');$('mt').textContent='Elegir tamaño de pieza';
+  $('mb').innerHTML='<div class="tgrid">'+FM.map((f,i)=>'<button type="button" class="tcard'+(S.fi===i?' on':'')+'" onclick="selF('+i+')"><div class="th">'+tp(f[0],f[1])+'</div>'+f[0]+' × '+f[1]+'</button>').join('')+'<button type="button" class="tcard oth'+(S.fi===-1?' on':'')+'" onclick="mC()"><div class="th plus">+</div>Otro tamaño</button></div>'}
+function closeM(){$('md').classList.add('hidden')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+function selF(i){S.fi=i;closeM();showPick();calc()}
+function mC(){$('mback').classList.remove('hidden');$('mt').textContent='Otro tamaño';
+  $('mb').innerHTML='<div class="dims"><div class="fld"><label for="ca">Ancho pieza</label><div class="iw"><input type="number" id="ca" step="0.1" min="0" inputmode="decimal" placeholder="0" onfocus="this.select()"><span>cm</span></div></div><div class="fld"><label for="cl">Largo pieza</label><div class="iw"><input type="number" id="cl" step="0.1" min="0" inputmode="decimal" placeholder="0" onfocus="this.select()"><span>cm</span></div></div></div><div class="msg hidden" id="cm">Escribe ancho y largo en centímetros.</div><button type="button" class="go" onclick="cUse()">Usar este tamaño</button>';
+  if(S.fi===-1&&S.cu[0]>0){$('ca').value=S.cu[0];$('cl').value=S.cu[1]}}
+function cUse(){const x=+$('ca').value||0,y=+$('cl').value||0;if(!(x>0&&y>0)){$('cm').classList.remove('hidden');return}S.fi=-1;S.cu=[x,y];closeM();showPick();calc()}
+function togOpt(){const o=$('obody').classList.toggle('hidden');$('opt').classList.toggle('open',!o)}
+function build(){
+  $('osum').textContent=(S.lay==='r'?'Recta':'Diagonal')+' · '+(S.jn?'Junta '+S.jn+' mm':'Sin junta')+' · Desperdicio '+S.dg+'%';
+  showPick();
+  $('jn').innerHTML=[0,2,3,5].map(v=>'<button type="button" class="bt'+(S.jn===v?' on':'')+'" onclick="setI(\'jn\','+v+')">'+(v?v+' mm':'Sin')+'</button>').join('');
+  $('dg').innerHTML=[5,10,15,20].map(v=>'<button type="button" class="bt'+(S.dg===v?' on':'')+'" onclick="setI(\'dg\','+v+')">'+v+'%</button>').join('');
+}
+function setMode(m){S.mode=m;$('m-med').classList.toggle('on',m==='med');$('m-m2').classList.toggle('on',m==='m2');$('d-med').classList.toggle('hidden',m!=='med');$('d-m2').classList.toggle('hidden',m==='med');calc()}
+function setLay(v){S.lay=v;S.dg=v==='d'?15:10;$('y-r').classList.toggle('on',v==='r');$('y-d').classList.toggle('on',v==='d');build();calc()}
+function setRd(v){S.rd=v;['up','down','real'].forEach(k=>$('r-'+k).classList.toggle('on',k===v));calc()}
+function reset(msg){['n','peg','fra'].forEach(k=>$(k).textContent='0');$('fx').textContent=msg;$('di').innerHTML='';$('dv').innerHTML='<div class="empty">Escribe las medidas para ver cómo queda el piso.</div>'}
+function calc(){
+  $('pt').textContent=S.mode==='m2'?'Vista referencial':'Así quedaría';
+  let A,L,area,asm=false;
+  if(S.mode==='med'){const a=+$('a').value||0,l=+$('l').value||0;A=Math.min(a,l);L=Math.max(a,l);area=A*L}
+  else{area=+$('m').value||0;A=L=Math.sqrt(area);asm=true}
+  const bad=$('bad');bad.classList.add('hidden');
+  let pw,pl;
+  {const[x,y]=cur();pw=Math.min(x,y)/100;pl=Math.max(x,y)/100}
+  if(!(area>0)){return reset('Escribe las medidas del espacio.')}
+  const rend=+$('r').value||0,j=S.jn/1000;
+  const conD=area*(1+S.dg/100);
+  if(rend>0){
+    const real=conD/rend;
+    $('n').textContent=rd(real);
+    $('peg').textContent=rd(area/3.5);$('fra').textContent=rd(area/6);
+    const comp=Math.ceil(r6(real))*rend;
+    $('fx').innerHTML='<b>'+f2(area)+' m²</b> + '+S.dg+'% desperdicio = <b>'+f2(conD)+' m²</b> ÷ '+f2(rend)+' m² por caja = <b>'+f2(real)+'</b> cajas.<br>Comprando '+Math.ceil(r6(real))+' cajas llevas '+f2(comp)+' m².';
+  }else{['n','peg','fra'].forEach(k=>$(k).textContent='0');$('fx').innerHTML='Área <b>'+f2(area)+' m²</b> + '+S.dg+'% = <b>'+f2(conD)+' m²</b>. Falta el rendimiento por caja.'}
+  if(!(pw>0&&pl>0)){$('dv').innerHTML='<div class="empty">Elige el tamaño de la pieza para ver cómo queda.</div>';$('di').innerHTML='';return}
+  draw(A,L,pw,pl,j,asm,rend)
+}
+function draw(A,L,pw,pl,j,asm,rend){
+  const px=pl+j,py=pw+j,diag=S.lay==='d',m=Math.max(L,A)*.1,fs=Math.max(L,A)*.035;
+  const nC=Math.ceil(r6((L+j)/px)),nR=Math.ceil(r6((A+j)/py)),nCf=Math.floor(r6((L+j)/px)),nRf=Math.floor(r6((A+j)/py));
+  const d=Math.hypot(L,A),nD=Math.ceil(d/Math.min(px,py))+2;
+  const cnt=diag?Math.ceil(d/px)*Math.ceil(d/py):nC*nR;
+  if(cnt>2500){$('di').innerHTML='';$('dv').innerHTML='<div class="empty">El área es muy grande para dibujarla con piezas tan pequeñas.</div>';return}
+  const W=L+2*m,H=A+2*m;
+  let s='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="cp"><rect x="'+m+'" y="'+m+'" width="'+L+'" height="'+A+'"/></clipPath></defs>';
+  s+='<rect x="'+m+'" y="'+m+'" width="'+L+'" height="'+A+'" fill="#8d969c"/>';
+  let tot,ent,cor;
+  if(!diag){
+    let g='';ent=0;cor=0;
+    for(let r=0;r<nR;r++)for(let c=0;c<nC;c++){
+      const x=c*px,y=r*py,w=Math.min(pl,L-x),h=Math.min(pw,A-y),cut=w<pl-1e-6||h<pw-1e-6;
+      cut?cor++:ent++;
+      g+='<rect x="'+r6(m+x)+'" y="'+r6(m+y)+'" width="'+r6(w)+'" height="'+r6(h)+'" fill="'+(cut?'#f5b25c':((r+c)%2?'#efc3c8':'#f7d9dc'))+'"/>'}
+    s+=g;tot=ent+cor;
+  }else{
+    const cx=m+L/2,cy=m+A/2;let g='';
+    for(let r=0;r<nD;r++)for(let c=0;c<nD;c++){
+      const x=cx-nD*px/2+c*px,y=cy-nD*py/2+r*py;
+      g+='<rect x="'+r6(x)+'" y="'+r6(y)+'" width="'+pl+'" height="'+pw+'" fill="'+((r+c)%2?'#efc3c8':'#f7d9dc')+'"/>'}
+    s+='<g clip-path="url(#cp)"><g transform="rotate(45 '+cx+' '+cy+')">'+g+'</g></g>';
+    tot=Math.ceil(r6(L*A/(px*py)*1.15));
+  }
+  s+='<rect x="'+m+'" y="'+m+'" width="'+L+'" height="'+A+'" fill="none" stroke="#3a1218" stroke-width="'+fs*.12+'"/>';
+  const tl=(x,y,t,rot)=>'<text '+(rot?'transform="translate('+x+' '+y+') rotate(-90)"':'x="'+x+'" y="'+y+'"')+' font-size="'+fs+'" font-weight="800" fill="#3a1218" text-anchor="middle">'+t+'</text>';
+  if(!asm)s+=tl(m+L/2,m-fs*.8,f2(L)+' m',0)+tl(m-fs*.8,m+A/2,f2(A)+' m',1);s+='</svg>';
+  $('dv').innerHTML=s;
+  const cm=x=>+(x*100).toFixed(1);
+  let h=asm?'<span class="chip">Vista referencial</span>':'';
+  h+='<span class="chip">Pieza: '+cm(pw)+' × '+cm(pl)+' cm</span>';
+  h+=diag?'<span class="chip">≈ '+tot+' piezas (con 15% de cortes)</span>':'<span class="chip">'+tot+' piezas = '+ent+' enteras + '+cor+' cortadas</span>';
+  if(rend>0)h+='<span class="chip">≈ '+Math.round(rend/(pw*pl))+' piezas por caja</span>';
+  h+='<span class="lg"><i style="background:#f7d9dc"></i>Entera</span>';
+  h+=diag?'':'<span class="lg"><i style="background:#f5b25c"></i>Corte</span>';
+  $('di').innerHTML=h;
+}
+/* Nuevo cálculo: deja todo en blanco para el siguiente cliente */
+function newCalc(){
+  ['a','l','m','r'].forEach(i=>$(i).value='');
+  S.fi=null;S.cu=[0,0];S.lay='r';S.jn=3;S.dg=10;
+  $('y-r').classList.add('on');$('y-d').classList.remove('on');
+  $('md').classList.add('hidden');$('obody').classList.add('hidden');$('opt').classList.remove('open');
+  setMode('med');setRd('up');build();calc();
+  window.scrollTo({top:0,behavior:'smooth'});$('a').focus({preventScroll:true})}
+build();calc();
+</script>
+</body>
+</html>
